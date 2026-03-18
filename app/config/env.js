@@ -1,11 +1,19 @@
 import dotenv from 'dotenv';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { app } from 'electron';
 
-// Em dev: .env na raiz do projeto (process.cwd())
-// Em produção: .env ao lado do .exe (extraFiles copia lá)
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+
 const envPath = app.isPackaged
     ? path.join(path.dirname(app.getPath('exe')), '.env')
-    : path.resolve(process.cwd(), '.env');
+    : path.resolve(__dirname, '..', '..', '.env');
 
-dotenv.config({ path: envPath });
+const result = dotenv.config({ path: envPath });
+
+if (result.error) {
+    console.error('[ENV] Falha ao carregar .env em:', envPath);
+} else {
+    console.log('[ENV] .env carregado de:', envPath);
+}
