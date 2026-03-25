@@ -40,7 +40,7 @@ export default class Customer {
             column = 0,
             draw = 1,
         } = data;
-
+        
         // ── Total sem filtro ────────────────
         const [{ count: total }] = await connection(Customer.table)
             .count('id as count');
